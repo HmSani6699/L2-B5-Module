@@ -3,12 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.todosRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const todo_router_1 = require("./App/Todo/todo.router");
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use('/todos', todo_router_1.todosRouter);
-app.get('/', (req, res) => {
+exports.todosRouter = express_1.default.Router();
+exports.todosRouter.get('/', (req, res) => {
     res.send('Hello World!333345');
 });
-exports.default = app;
