@@ -18,25 +18,39 @@ const mongoose_1 = require("mongoose");
 exports.app = (0, express_1.default)();
 // Note Schema
 const noteSchema = new mongoose_1.Schema({
-    title: String,
-    content: String
+    title: { type: String, require: true, trim: true },
+    content: { type: String, default: "" },
+    category: {
+        type: String,
+        enum: ["Note js", "MongoDB", "Express", "Mongoose"],
+        default: "Mongoose",
+    },
+    comment: [{ body: String, date: String }],
+    tags: {
+        lavel: { type: String, require: true },
+        color: { type: String, default: "Red" },
+    },
 });
 // Note Schema Model
-const Note = (0, mongoose_1.model)('Note', noteSchema);
+const Note = (0, mongoose_1.model)("Note", noteSchema);
 // Create a new Note
-exports.app.post('/create-note', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.app.post("/create-note", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const myNote = new Note({
         title: "Note Number 1",
-        content: "My frist note in mongoose"
+        content: "My frist note in mongoose",
+        comment: [{ body: "Eibar sob thik ache", date: "23/23/2006" }],
+        tags: {
+            lavel: "Daron",
+        },
     });
     // Save data in mongodb database
     yield myNote.save();
     res.status(201).json({
         succcess: true,
         message: "Note created sucessfully ...!",
-        myNote: myNote
+        myNote: myNote,
     });
 }));
-exports.app.get('/', (req, res) => {
-    res.send('Hallo world');
+exports.app.get("/", (req, res) => {
+    res.send("Hallo world");
 });
