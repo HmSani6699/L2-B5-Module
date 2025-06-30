@@ -8,13 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const App_1 = require("./App");
+const mongoose_1 = __importDefault(require("mongoose"));
 const PORT = 5000;
 let server;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // Mongoose ODM 
+            yield mongoose_1.default.connect('mongodb+srv://devsadiq:devsadiq6699@mongodb.oupwmil.mongodb.net/bookhouse?retryWrites=true&w=majority&appName=mongodb');
+            console.log('✅ Mongodb has connecting in Mogoose...!');
+            // Server
             server = App_1.app.listen(PORT, () => {
                 console.log('✅ Server is runing on the port:5000');
             });
