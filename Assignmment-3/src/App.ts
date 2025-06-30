@@ -6,10 +6,16 @@ export const app: Application = express();
 app.use(express.json());
 
 // Note Schema
-const noteSchema = new Schema({
-  title: { type: String, require: true, trim: true },
-  content: { type: String, default: "" },
-});
+const noteSchema = new Schema(
+  {
+    title: { type: String, require: true, trim: true },
+    content: { type: String, default: "" },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
 
 // Note Schema Model
 const Note = model("Note", noteSchema);
@@ -61,7 +67,7 @@ app.put("/notes/:nodeID", async (req: Request, res: Response) => {
   const id = req.params.nodeID;
   const updateBody = req.body;
 
-  const note = await Note.findByIdAndUpdate(id, updateBody);
+  const note = await Note.findByIdAndUpdate(id, updateBody, { new: true });
 
   res.status(201).json({
     succcess: true,

@@ -21,6 +21,9 @@ exports.app.use(express_1.default.json());
 const noteSchema = new mongoose_1.Schema({
     title: { type: String, require: true, trim: true },
     content: { type: String, default: "" },
+}, {
+    versionKey: false,
+    timestamps: true,
 });
 // Note Schema Model
 const Note = (0, mongoose_1.model)("Note", noteSchema);
@@ -66,7 +69,7 @@ exports.app.get("/notes/:nodeID", (req, res) => __awaiter(void 0, void 0, void 0
 exports.app.put("/notes/:nodeID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.nodeID;
     const updateBody = req.body;
-    const note = yield Note.findByIdAndUpdate(id, updateBody);
+    const note = yield Note.findByIdAndUpdate(id, updateBody, { new: true });
     res.status(201).json({
         succcess: true,
         message: "Note Update sucessfully ...!",
