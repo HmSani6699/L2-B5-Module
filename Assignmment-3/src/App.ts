@@ -3,43 +3,82 @@ import { model, Schema } from "mongoose";
 
 export const app: Application = express();
 
+app.use(express.json());
+
 // Note Schema
 const noteSchema = new Schema({
   title: { type: String, require: true, trim: true },
   content: { type: String, default: "" },
-  category: {
-    type: String,
-    enum: ["Note js", "MongoDB", "Express", "Mongoose"],
-    default: "Mongoose",
-  },
-  comment: [{ body: String, date: String }],
-  tags: {
-    lavel: { type: String, require: true },
-    color: { type: String, default: "Red" },
-  },
 });
 
 // Note Schema Model
 const Note = model("Note", noteSchema);
 
 // Create a new Note
-app.post("/create-note", async (req: Request, res: Response) => {
-  const myNote = new Note({
-    title: "Note Number 1",
-    content: "My frist note in mongoose",
-    comment: [{ body: "Eibar sob thik ache", date: "23/23/2006" }],
-    tags: {
-      lavel: "Daron",
-    },
-  });
-
-  // Save data in mongodb database
-  await myNote.save();
+app.post("/notes/create-note", async (req: Request, res: Response) => {
+  const note = req.body;
+  await Note.create(note);
 
   res.status(201).json({
     succcess: true,
     message: "Note created sucessfully ...!",
-    myNote: myNote,
+    note,
+  });
+});
+
+// Get all Notes
+app.get("/notes", async (req: Request, res: Response) => {
+  try {
+    const notes = await Note.find();
+    res.status(200).json({
+      succcess: true,
+      message: "Get all notes sucessfully ...!",
+      notes,
+    });
+  } catch (error) {
+    res.status(400).json({
+      succcess: false,
+      message: "No data found ...!",
+      error,
+    });
+  }
+});
+
+// Get a single Notes
+app.get("/notes/:nodeID", async (req: Request, res: Response) => {
+  const id = req.params.nodeID;
+  const note = await Note.findById(id);
+
+  res.status(201).json({
+    succcess: true,
+    message: " Get a single Note sucessfully ...!",
+    note,
+  });
+});
+
+// Update Notes
+app.put("/notes/:nodeID", async (req: Request, res: Response) => {
+  const id = req.params.nodeID;
+  const updateBody = req.body;
+
+  const note = await Note.findByIdAndUpdate(id, updateBody);
+
+  res.status(201).json({
+    succcess: true,
+    message: "Note Update sucessfully ...!",
+    note,
+  });
+});
+
+// Delete a single Notes
+app.delete("/notes/:nodeID", async (req: Request, res: Response) => {
+  const id = req.params.nodeID;
+  const note = await Note.findByIdAndDelete(id);
+
+  res.status(201).json({
+    succcess: true,
+    message: "Note Delete sucessfully ...!",
+    note,
   });
 });
 
