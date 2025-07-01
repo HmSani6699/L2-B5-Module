@@ -32,3 +32,65 @@ exports.userRoutes.post("/create-user", (req, res) => __awaiter(void 0, void 0, 
         console.log(error);
     }
 }));
+// GET all users
+exports.userRoutes.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const getAllUsers = yield user_model_1.User.find();
+    try {
+        res.status(201).json({
+            success: true,
+            Message: "User GET succcessfully ... !",
+            getAllUsers,
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+// GET a single user
+exports.userRoutes.get("/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.userID;
+    const getUser = yield user_model_1.User.findById(id);
+    try {
+        res.status(201).json({
+            success: true,
+            Message: "GET  a single user succcessfully ... !",
+            getUser,
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+// Update a single user
+exports.userRoutes.put("/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.userID;
+    const updateBoday = req.body;
+    const updatedUser = yield user_model_1.User.findByIdAndUpdate(id, updateBoday, {
+        now: true,
+    });
+    try {
+        res.status(201).json({
+            success: true,
+            Message: "UPDATE  a single user succcessfully ... !",
+            updatedUser,
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
+// DELETED a single user
+exports.userRoutes.delete("/:userID", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.userID;
+    const deletedUser = yield user_model_1.User.findByIdAndDelete(id);
+    try {
+        res.status(201).json({
+            success: true,
+            Message: "DELETED  a single user succcessfully ... !",
+            deletedUser,
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+}));
